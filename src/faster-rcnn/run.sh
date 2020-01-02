@@ -1,0 +1,2 @@
+/home/duxiaowey/miniconda3/envs/myps/bin/python trainval_net.py --dataset voc_2013 --net res101 --bs 24 --nw 8 --lr 1e-3  --cuda --mGPUs 
+#--r True --checksession 1 --checkepoch 30 --checkpoint 54 --s 2

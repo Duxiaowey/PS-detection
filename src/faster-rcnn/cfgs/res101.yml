@@ -1,0 +1,18 @@
+EXP_DIR: res101
+TRAIN:
+  HAS_RPN: True
+  BBOX_NORMALIZE_TARGETS_PRECOMPUTED: True
+  RPN_POSITIVE_OVERLAP: 0.7     # 大于0.7为正样本，小于0.3为负样本
+  RPN_BATCHSIZE: 256            # 每张图片中取128正128负共256个anchor
+  PROPOSAL_METHOD: gt
+  BG_THRESH_LO: 0.0
+  DISPLAY: 20
+  BATCH_SIZE: 128
+  WEIGHT_DECAY: 0.0001
+  DOUBLE_BIAS: False
+  LEARNING_RATE: 0.001
+TEST:
+  HAS_RPN: True
+POOLING_SIZE: 7                 # 从共享卷积图上取出特征图后，进行7x7的pooling
+POOLING_MODE: align
+CROP_RESIZE_WITH_MAX_POOL: False
