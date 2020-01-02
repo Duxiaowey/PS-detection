@@ -3,7 +3,7 @@ TRAIN:
   HAS_RPN: True
   BBOX_NORMALIZE_TARGETS_PRECOMPUTED: True
   RPN_POSITIVE_OVERLAP: 0.7     # 大于0.7为正样本，小于0.3为负样本
-  RPN_BATCHSIZE: 256            # 每张图片中取128正128负共256个anchor
+  RPN_BATCHSIZE: 128            # 每张图片中取128正128负共256个anchor
   PROPOSAL_METHOD: gt
   BG_THRESH_LO: 0.0
   DISPLAY: 20
