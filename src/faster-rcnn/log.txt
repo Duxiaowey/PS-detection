@@ -1,5 +1,5 @@
 Called with args:
-Namespace(batch_size=24, checkepoch=1, checkpoint=0, checkpoint_interval=1000, checksession=1, class_agnostic=False, cuda=True, dataset='voc_2013', disp_interval=100, large_scale=False, lr=0.001, lr_decay_gamma=0.1, lr_decay_step=5, mGPUs=True, max_epochs=200, net='res101', num_workers=8, optimizer='sgd', resume=False, save_dir='models', session=1, start_epoch=1, use_tfboard=False)
+Namespace(batch_size=12, checkepoch=83, checkpoint=613, checkpoint_interval=1000, checksession=1, class_agnostic=False, cuda=True, dataset='voc_2013', disp_interval=100, large_scale=False, lr=0.001, lr_decay_gamma=0.1, lr_decay_step=5, mGPUs=True, max_epochs=200, net='res101', num_workers=4, optimizer='sgd', resume=True, save_dir='models', session=1, start_epoch=1, use_tfboard=False)
 Using config:
 {'ANCHOR_RATIOS': [0.5, 1, 2],
  'ANCHOR_SCALES': [8, 16, 32, 64],
@@ -60,7 +60,7 @@ Using config:
            'MAX_SIZE': 1000,
            'MOMENTUM': 0.9,
            'PROPOSAL_METHOD': 'gt',
-           'RPN_BATCHSIZE': 256,
+           'RPN_BATCHSIZE': 128,
            'RPN_BBOX_INSIDE_WEIGHTS': [1.0, 1.0, 1.0, 1.0],
            'RPN_CLOBBER_POSITIVES': False,
            'RPN_FG_FRACTION': 0.5,
@@ -92,11 +92,10 @@ voc_2013_train gt roidb loaded from /home/duxiaowey/my_ps/src/faster-rcnn/data/c
 done
 Preparing training data...
 done
-before filtering, there are 7376 images...
-after filtering, there are 7376 images...
-7376 roidb entries
+before filtering, there are 7368 images...
+after filtering, there are 7368 images...
+7368 roidb entries
 24
 Loading pretrained weights from data/pretrained_model/resnet101_caffe.pth
-[session 1][epoch  1][iter    0/ 307] loss: nan, lr: 1.00e-03
-			fg/bg=(199/2873), time cost: 20.218349
-			rpn_cls: 0.7464, rpn_box: nan, rcnn_cls: 0.8049, rcnn_box 0.1636
+loading checkpoint models/res101/voc_2013/faster_rcnn_1_83_613.pth
+loaded checkpoint models/res101/voc_2013/faster_rcnn_1_83_613.pth

@@ -9,7 +9,7 @@ from torch.autograd import Variable
 import numpy as np
 from model.utils.config import cfg
 from model.rpn.rpn import _RPN
-
+from model.nets.srm import SRM
 from model.roi_layers import ROIAlign, ROIPool
 
 # from model.roi_pooling.modules.roi_pool import _RoIPooling
@@ -24,6 +24,7 @@ class _fasterRCNN(nn.Module):
     """ faster RCNN """
     def __init__(self, classes, class_agnostic):
         super(_fasterRCNN, self).__init__()
+        self.SRM = SRM()
         self.classes = classes
         self.n_classes = len(classes)
         self.class_agnostic = class_agnostic
@@ -42,14 +43,16 @@ class _fasterRCNN(nn.Module):
         self.RCNN_roi_align = ROIAlign((cfg.POOLING_SIZE, cfg.POOLING_SIZE), 1.0/16.0, 0)
 
     def forward(self, im_data, im_info, gt_boxes, num_boxes):
+        
         batch_size = im_data.size(0)
 
         im_info = im_info.data
         gt_boxes = gt_boxes.data
         num_boxes = num_boxes.data
-
+        im_data_n = self.SRM(im_data)
         # feed image data to base model to obtain base feature map
         base_feat = self.RCNN_base(im_data)
+        base_feat_n = self.RCNN_base_n(im_data_n)
 
         # feed base feature map tp RPN to obtain rois
         rois, rpn_loss_cls, rpn_loss_bbox = self.RCNN_rpn(base_feat, im_info, gt_boxes, num_boxes)
