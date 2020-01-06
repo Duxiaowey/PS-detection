@@ -10,6 +10,7 @@ import numpy as np
 from model.utils.config import cfg
 from model.rpn.rpn import _RPN
 from model.nets.srm import SRM
+from model.nets.compact_bilinear_pooling import CompactBilinearPooling
 from model.roi_layers import ROIAlign, ROIPool
 
 # from model.roi_pooling.modules.roi_pool import _RoIPooling
@@ -50,6 +51,7 @@ class _fasterRCNN(nn.Module):
         gt_boxes = gt_boxes.data
         num_boxes = num_boxes.data
         im_data_n = self.SRM(im_data)
+
         # feed image data to base model to obtain base feature map
         base_feat = self.RCNN_base(im_data)
         base_feat_n = self.RCNN_base_n(im_data_n)
@@ -79,11 +81,14 @@ class _fasterRCNN(nn.Module):
 
         if cfg.POOLING_MODE == 'align':
             pooled_feat = self.RCNN_roi_align(base_feat, rois.view(-1, 5))
+            pooled_feat_n = self.RCNN_roi_align(base_feat_n, rois.view(-1, 5))
         elif cfg.POOLING_MODE == 'pool':
             pooled_feat = self.RCNN_roi_pool(base_feat, rois.view(-1,5))
+            pooled_feat_n = self.RCNN_roi_pool(base_feat_n, rois.view(-1,5))
 
-        # feed pooled features to top model
+        # feed pooled features to fc model
         pooled_feat = self._head_to_tail(pooled_feat)
+        pooled_feat_n = self._head_to_tail_n(pooled_feat_n)
 
         # compute bbox offset
         bbox_pred = self.RCNN_bbox_pred(pooled_feat)
@@ -93,8 +98,14 @@ class _fasterRCNN(nn.Module):
             bbox_pred_select = torch.gather(bbox_pred_view, 1, rois_label.view(rois_label.size(0), 1, 1).expand(rois_label.size(0), 1, 4))
             bbox_pred = bbox_pred_select.squeeze(1)
 
+        # feed pooled features to compact bilinear pooling layer
+        # pooled_feat: [128*N, 2048]
+        # pooled_feat_n: [128*N, 2048]
+        Bipooling = CompactBilinearPooling(2048, 2048, 2048)
+        bipooled_feat = Bipooling(pooled_feat, pooled_feat_n)
+
         # compute object classification probability
-        cls_score = self.RCNN_cls_score(pooled_feat)
+        cls_score = self.RCNN_cls_score(bipooled_feat)
         cls_prob = F.softmax(cls_score, 1)
 
         RCNN_loss_cls = 0

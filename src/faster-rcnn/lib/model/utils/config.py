@@ -40,7 +40,7 @@ __C.TRAIN.DISPLAY = 10
 __C.TRAIN.DOUBLE_BIAS = True
 
 # Whether to initialize the weights with truncated normal distribution
-__C.TRAIN.TRUNCATED = False
+__C.TRAIN.TRUNCATED = True
 
 # Whether to have weight decay on bias as well
 __C.TRAIN.BIAS_DECAY = False

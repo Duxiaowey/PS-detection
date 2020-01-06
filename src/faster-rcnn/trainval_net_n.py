@@ -161,7 +161,7 @@ if __name__ == '__main__':
         args.imdbval_name = "voc_2012_val"
         args.set_cfgs = ['ANCHOR_SCALES', '[8, 16, 32, 64]',
                          'ANCHOR_RATIOS', '[0.5,1,2]', 'MAX_NUM_GT_BOXES', '20']
-    elif args.dataset == "voc_2013":
+    elif args.dataset == "voc_2013" or args.dataset == 'voc_2013_n':
         args.imdb_name = "voc_2013_train"
         args.imdbval_name = "voc_2013_val"
         args.set_cfgs = ['ANCHOR_SCALES', '[8, 16, 32, 64]',

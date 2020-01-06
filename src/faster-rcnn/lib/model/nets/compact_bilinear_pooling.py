@@ -12,7 +12,8 @@ def CountSketchFn_forward(h, s, output_size, x, force_cpu_scatter_add=False):
     out_size = x_size[:-1] + (output_size,)
 
     # Broadcast s and compute x * s
-    s = s.view(s_view)
+    s = s.view(s_view).cuda()
+    x = x.cuda()
     xs = x * s
 
     # Broadcast h then compute h:
@@ -24,14 +25,14 @@ def CountSketchFn_forward(h, s, output_size, x, force_cpu_scatter_add=False):
         return out.scatter_add_(-1, h.cpu(), xs.cpu()).cuda()
     else:
         out = x.new(*out_size).zero_()
-        return out.scatter_add_(-1, h, xs)
+        return out.scatter_add_(-1, h.cuda(), xs.cuda())
 
 
 def CountSketchFn_backward(h, s, x_size, grad_output):
     s_view = (1,) * (len(x_size)-1) + (x_size[-1],)
 
-    s = s.view(s_view)
-    h = h.view(s_view).expand(x_size)
+    s = s.view(s_view).cuda()
+    h = h.view(s_view).expand(x_size).cuda()
 
     grad_x = grad_output.gather(-1, h)
     grad_x = grad_x * s
