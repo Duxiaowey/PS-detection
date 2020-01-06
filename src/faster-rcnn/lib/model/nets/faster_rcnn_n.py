@@ -101,8 +101,10 @@ class _fasterRCNN(nn.Module):
         # feed pooled features to compact bilinear pooling layer
         # pooled_feat: [128*N, 2048]
         # pooled_feat_n: [128*N, 2048]
-        Bipooling = CompactBilinearPooling(2048, 2048, 2048)
+        Bipooling = CompactBilinearPooling(2048, 2048, 2048*8)
         bipooled_feat = Bipooling(pooled_feat, pooled_feat_n)
+        bipooled_feat = torch.mul(torch.sign(bipooled_feat), torch.sqrt(torch.abs(bipooled_feat) + 1e-12))
+        bipooled_feat = bipooled_feat / torch.norm(bipooled_feat, dim=0)
 
         # compute object classification probability
         cls_score = self.RCNN_cls_score(bipooled_feat)

@@ -21,6 +21,7 @@ class SRM(nn.Module):
     def forward(self, image):
         image = (image - torch.min(image)) / \
             (torch.max(image) - torch.min(image))
+        image = image * 2 - 1
         noise_data = F.conv2d(image, self._getfilters().cuda(), stride=1, padding=2)
         return noise_data
 

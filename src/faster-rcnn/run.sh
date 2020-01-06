@@ -4,7 +4,8 @@
 # --r True --checksession 1 --checkepoch 83 --checkpoint 613
 
 
-CUDA_VISIBLE_DEVICES=0,1 /home/duxiaowey/miniconda3/envs/myps/bin/python \
+# CUDA_VISIBLE_DEVICES=0,1 
+/home/duxiaowey/miniconda3/envs/myps/bin/python \
 trainval_net_n.py --dataset voc_2013_n --net res101  --lr 1e-4 \
---bs 4 --nw 2 --cuda --mGPUs 
+--bs 8 --nw 2 --cuda --mGPUs 
 #--r True --checksession 1 --checkepoch 83 --checkpoint 613
